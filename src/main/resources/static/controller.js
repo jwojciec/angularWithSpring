@@ -1,7 +1,7 @@
 (function () {
     var app = angular.module('productsApp', []);
 
-    app.controller('ProductListController', function () {
+    app.controller('ProductListController', [ '$http', function ($http) {
         var productList = this;
         productList.isFormVisible = false;
 
@@ -50,41 +50,13 @@
                 productList.addNewProduct(product);
             }
             productList.currentProduct = {};
+            productList.isFormVisible = false;
         };
 
-        productList.products = [
-            {
-                product_id: 8,
-                product_name: 'Gigabyte GPU',
-                category: 'GPU',
-                description: 'Gigabyte GPU test description',
-                product_price: 1123,
-                expiration_date: '12/12/2016'
-            },
-            {
-                product_id: 3,
-                product_name: 'Intel CPU',
-                category: 'CPU',
-                description: 'CPU test description',
-                product_price: 123,
-                expiration_date: '12/12/2016'
-            },
-            {
-                product_id: 4,
-                product_name: 'Asus GPU',
-                category: 'GPU',
-                description: 'GPU test description',
-                product_price: 231,
-                expiration_date: '12/12/2016'
-            },
-            {
-                product_id: 10,
-                product_name: 'Logitech mouse',
-                category: 'mouse',
-                description: 'mouse description',
-                product_price: 40,
-                expiration_date: '12/12/2016'
-            }
-        ];
-    });
+        productList.products = [];
+		
+		$http.get('http://localhost:8080/products').success(function(data){
+			productList.products = data;
+		});
+    }]);
 })();
